@@ -1,0 +1,24 @@
+.ant-pro-footer-bar {
+    z-index: 0;
+    line-height: 54px;
+    background-color: #F5F5F5;
+    border: none;
+}
+
+.mini-editor-panel {
+    position: fixed !important;
+    z-index: 999999 !important;
+    display: block !important;
+}
+
+.ant-pro-layout {
+    padding: 0px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.ant-pro-layout .ant-pro-layout-content {
+    padding: 0px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}

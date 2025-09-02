@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Arbutus+Slab&family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Copse&family=DM+Serif+Text:ital@0;1&family=Monomakh&family=Platypi:ital,wght@0,300..800;1,300..800&family=Scope+One&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    color: #111827;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+.font {
+    font-family: "Copse", "Platypi", "Arbutus Slab", "Bodoni Moda", "Monomakh", "Bodoni Moda SC", "Scope One", "DM Serif Text", "DM Serif Text", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal, italic;
+}
+
+
+
+
+/* Scrollbar style */
+/* ::-webkit-scrollbar {
+    width: 0px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #999;
+} */
