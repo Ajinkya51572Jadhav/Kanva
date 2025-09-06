@@ -3,7 +3,7 @@ import { Transformer, Image as KonvaImage } from "react-konva";
 import { useKonvaSnapping } from "use-konva-snapping";
 import Konva from "konva";
 
-export const SelectableImage = ({ shape, selected, onSelect, onChange }) => {
+export default function SelectableImage({ shape, selected, onSelect, onChange }) {
     const imgRef = useRef();
     const trRef = useRef();
     const { handleDragging, handleDragEnd } = useKonvaSnapping({
@@ -21,12 +21,12 @@ export const SelectableImage = ({ shape, selected, onSelect, onChange }) => {
 
         const previewImg = new window.Image();
         previewImg.crossOrigin = "anonymous";
-        previewImg.src = shape.src;
+        previewImg.src = shape?.src;
         previewImg.onload = () => {
-            if (imgRef.current) {
-                imgRef.current.image(previewImg);
+            if (imgRef?.current) {
+                imgRef?.current?.image(previewImg);
                 applyFilters();
-                imgRef.current.getLayer()?.batchDraw();
+                imgRef?.current.getLayer()?.batchDraw();
             }
         };
     }, [shape?.src, shape?.filters, shape?.flipX, shape?.flipY]);
@@ -36,21 +36,21 @@ export const SelectableImage = ({ shape, selected, onSelect, onChange }) => {
         const node = imgRef.current;
         let filters = [];
 
-        if (shape.grayscale) filters.push(Konva.Filters.Grayscale);
-        if (shape.sepia) filters.push(Konva.Filters.Sepia);
-        if (shape.blur > 0) filters.push(Konva.Filters.Blur);
-        if (shape.brightness !== 0) filters.push(Konva.Filters.Brighten);
-        if (shape.contrast !== 0) filters.push(Konva.Filters.Contrast);
-        if (shape.hue !== 0) filters.push(Konva.Filters.HSV);
-        if (shape.saturation !== 0) filters.push(Konva.Filters.HSV);
+        if (shape?.grayscale) filters?.push(Konva.Filters.Grayscale);
+        if (shape?.sepia) filters.push(Konva.Filters.Sepia);
+        if (shape?.blur > 0) filters?.push(Konva.Filters.Blur);
+        if (shape?.brightness !== 0) filters?.push(Konva.Filters.Brighten);
+        if (shape?.contrast !== 0) filters?.push(Konva.Filters.Contrast);
+        if (shape?.hue !== 0) filters?.push(Konva.Filters.HSV);
+        if (shape?.saturation !== 0) filters?.push(Konva.Filters.HSV);
 
-        node.filters(filters);
-        node.blurRadius(shape.blur || 0);
-        node.brightness(shape.brightness || 0);
-        node.contrast(shape.contrast || 0);
-        node.hue(shape.hue || 0);
-        node.saturation(shape.saturation || 0);
-        node.cache(); // improves performance
+        node?.filters(filters);
+        node?.blurRadius(shape?.blur || 0);
+        node?.brightness(shape?.brightness || 0);
+        node?.contrast(shape?.contrast || 0);
+        node?.hue(shape?.hue || 0);
+        node?.saturation(shape?.saturation || 0);
+        node?.cache(); // improves performance
     };
 
     useEffect(() => {
@@ -58,50 +58,50 @@ export const SelectableImage = ({ shape, selected, onSelect, onChange }) => {
     }, [shape]);
 
     useEffect(() => {
-        if (selected && trRef.current && imgRef.current) {
-            trRef.current.nodes([imgRef.current]);
-            trRef.current.getLayer().batchDraw();
+        if (selected && trRef?.current && imgRef?.current) {
+            trRef?.current?.nodes([imgRef?.current]);
+            trRef?.current?.getLayer()?.batchDraw();
         }
     }, [selected]);
 
     if (!shape) return null;
 
     function isLocked() {
-        if (shape.locked) return;
+        if (shape?.locked) return;
     }
 
     return (
         <>
             <KonvaImage
                 ref={imgRef}
-                x={shape.x}
-                y={shape.y}
-                width={shape.width}
-                height={shape.height}
-                rotation={shape.rotation || 0}
-                draggable={!shape.locked}
-                visible={shape.visible}
-                scaleX={shape.flipH ? -1 : 1}
-                scaleY={shape.flipV ? -1 : 1}
-                offsetX={shape.flipH ? shape.width : 0}
-                offsetY={shape.flipV ? shape.height : 0}
-                opacity={shape.opacity ?? 1}
-                shadowColor={shape.shadowColor || "black"}
-                shadowBlur={shape.shadowBlur || 0}
-                shadowOffsetX={shape.shadowOffsetX || 0}
-                shadowOffsetY={shape.shadowOffsetY || 0}
-                shadowOpacity={shape.shadowOpacity || 0}
-                cornerRadius={shape.cornerRadius || 0}
-                stroke={shape.borderColor || ""}
-                strokeWidth={shape.borderWidth || 0}
+                x={shape?.x}
+                y={shape?.y}
+                width={shape?.width}
+                height={shape?.height}
+                rotation={shape?.rotation || 0}
+                draggable={!shape?.locked}
+                visible={shape?.visible}
+                scaleX={shape?.flipH ? -1 : 1}
+                scaleY={shape?.flipV ? -1 : 1}
+                offsetX={shape?.flipH ? shape?.width : 0}
+                offsetY={shape?.flipV ? shape?.height : 0}
+                opacity={shape?.opacity ?? 1}
+                shadowColor={shape?.shadowColor || "black"}
+                shadowBlur={shape?.shadowBlur || 0}
+                shadowOffsetX={shape?.shadowOffsetX || 0}
+                shadowOffsetY={shape?.shadowOffsetY || 0}
+                shadowOpacity={shape?.shadowOpacity || 0}
+                cornerRadius={shape?.cornerRadius || 0}
+                stroke={shape?.borderColor || ""}
+                strokeWidth={shape?.borderWidth || 0}
                 onMouseDown={onSelect}
                 onTap={onSelect}
                 onDragMove={(e) => {
                     isLocked();
-                    const nx = e.target.x();
-                    const ny = e.target.y();
+                    const nx = e?.target?.x();
+                    const ny = e?.target?.y();
                     handleDragging(e);
-                    e.target.position({ x: nx, y: ny });
+                    e?.target?.position({ x: nx, y: ny });
                 }}
                 onDragEnd={(e) => {
                     isLocked()
@@ -110,7 +110,7 @@ export const SelectableImage = ({ shape, selected, onSelect, onChange }) => {
                 }}
                 onTransformEnd={() => {
                     isLocked()
-                    const node = imgRef.current;
+                    const node = imgRef?.current;
                     if (!node) return;
                     const scaleX = node.scaleX();
                     const scaleY = node.scaleY();
@@ -130,101 +130,3 @@ export const SelectableImage = ({ shape, selected, onSelect, onChange }) => {
         </>
     );
 };
-
-
-
-
-
-
-
-
-
-
-// import React, { useRef, useEffect } from "react";
-// import { Transformer, Image as KonvaImage } from "react-konva";
-// import { snap } from "../pages/Editor";
-
-// export const SelectableImage = ({ shape, selected, onSelect, onChange }) => {
-//     const imgRef = useRef();
-//     const trRef = useRef();
-
-//     useEffect(() => {
-//         if (!shape?.src) return;
-
-//         // 1. Load preview instantly
-//         const previewImg = new window.Image();
-//         previewImg.crossOrigin = "anonymous";
-//         previewImg.src = shape.src;
-//         previewImg.onload = () => {
-//             if (imgRef.current) {
-//                 imgRef.current.image(previewImg);
-//                 imgRef.current.getLayer()?.batchDraw();
-//             }
-//         };
-
-//         // 2. Load HD in background & swap
-//         if (shape.fullSrc) {
-//             const hdImg = new window.Image();
-//             hdImg.crossOrigin = "anonymous";
-//             hdImg.src = shape.fullSrc;
-//             hdImg.onload = () => {
-//                 if (imgRef.current) {
-//                     imgRef.current.image(hdImg); // 👈 replace with HD
-//                     imgRef.current.getLayer()?.batchDraw();
-//                 }
-//             };
-//         }
-//     }, [shape?.src, shape?.fullSrc]);
-
-//     useEffect(() => {
-//         if (selected && trRef.current && imgRef.current) {
-//             trRef.current.nodes([imgRef.current]);
-//             trRef.current.getLayer().batchDraw();
-//         }
-//     }, [selected]);
-
-//     if (!shape) return null;
-
-//     return (
-//         <>
-//             <KonvaImage
-//                 ref={imgRef}
-//                 x={shape.x}
-//                 y={shape.y}
-//                 width={shape.width}
-//                 height={shape.height}
-//                 rotation={shape.rotation || 0}
-//                 draggable
-//                 onMouseDown={onSelect}
-//                 onTap={onSelect}
-//                 onDragMove={(e) => {
-//                     const nx = snap(e.target.x());
-//                     const ny = snap(e.target.y());
-//                     e.target.position({ x: nx, y: ny });
-//                 }}
-//                 onDragEnd={(e) =>
-//                     onChange({ ...shape, x: e.target.x(), y: e.target.y() })
-//                 }
-//                 onTransformEnd={() => {
-//                     const node = imgRef.current;
-//                     if (!node) return;
-//                     const scaleX = node.scaleX();
-//                     const scaleY = node.scaleY();
-//                     node.scaleX(1);
-//                     node.scaleY(1);
-//                     onChange({
-//                         ...shape,
-//                         x: snap(node.x()),
-//                         y: snap(node.y()),
-//                         width: snap(node.width() * scaleX),
-//                         height: snap(node.height() * scaleY),
-//                         rotation: Math.round(node.rotation()),
-//                     });
-//                 }}
-//                 opacity={shape.opacity ?? 1}
-//             />
-//             {selected && <Transformer ref={trRef} rotateEnabled />}
-//         </>
-//     );
-// };
-

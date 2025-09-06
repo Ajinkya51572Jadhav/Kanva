@@ -1,13 +1,38 @@
-import React from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Layout, Button, Row, Col, Typography, Card, Image } from "antd";
+import { deleteTemplate } from "../redux/editorReducer";
 
+import { Layout, Button, Row, Col, Typography, Card, Image, Modal, Tabs, Flex, Tooltip } from "antd";
+const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 const { Title, Paragraph } = Typography;
+
+import { CiCircleCheck, CiCirclePlus } from "react-icons/ci";
+import { HiOutlineTemplate } from "react-icons/hi";
+import { HiOutlinePhoto } from "react-icons/hi2";
+import { RiFontSize2, RiDeleteBin5Line, RiUpload2Line, RiDragMove2Fill } from "react-icons/ri";
+import { TfiLayersAlt } from "react-icons/tfi";
+import { IoResizeSharp } from "react-icons/io5";
+import { FaCrown } from "react-icons/fa";
 
 import logo from "../assets/logo.png";
 import user from "../assets/user.png";
 import laptop from "../assets/laptop.png";
+
+
+const proFeatures = ["Multiple add pages", "Free of cost all designs", "Add your ideas", "Custom fonts & styles", "Export in HD quality", "One-click Download"];
+
+const documentation = [
+    { icon: <HiOutlineTemplate size={20} />, text: "Banner - Choose from templates" },
+    { icon: <RiFontSize2 size={20} />, text: "Text - Double tap on text to edit" },
+    { icon: <HiOutlinePhoto size={20} />, text: "Photo - Upload or select stock photos" },
+    { icon: <CiCircleCheck size={25} />, text: "Element - Add shapes, icons" },
+    { icon: <RiUpload2Line size={20} />, text: "Upload - Import your own images/files" },
+    { icon: <TfiLayersAlt size={20} />, text: "Layer - Manage layer order (front/back)" },
+    { icon: <IoResizeSharp size={20} />, text: "Resize - Change canvas dimensions anytime" },
+    { icon: <RiDragMove2Fill size={20} />, text: "Features - save, Undo/Redo & more" },
+];
 
 const footer = [
     {
@@ -31,8 +56,18 @@ const footer = [
     }
 ]
 
+let colors = [
+    "gold", "green", "orange", "pink", "purple", "red", "volcano", "yellow",
+    "aqua", "bisque", "blueviolet", "brown", "chocolate", "crimson", "cyan", "darkgray", "darkorange", "greenyellow",
+    "hotpink", "indigo", "lemonchiffon", "olive", "maroon", "peru", "seashell", "silver", "snow", "moccasin", "antiquewhite",
+    "aliceblue", "salmon", "cadetblue", "blue", "cyan", "geekblue"
+];
 export default function HomePage() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { savedTemplates } = useSelector((state) => state?.editor ?? {});
+    const [open, setOpen] = useState(false);
+
     return (
         <Layout>
 
@@ -40,23 +75,89 @@ export default function HomePage() {
                 <Image width={180} src={logo} alt="Kanva Logo" preview={false} style={{ cursor: "pointer" }} title="Kanva Editor" />
                 <Image width={70} src={user} alt="User Profile" preview={false} style={{ cursor: "pointer" }} title="User Profile" />
             </Header>
+            {/* modal  */}
+
+            <Modal
+                title={<Flex align="center" justify="start" gap={5}>
+                    <FaCrown size={30} color="gold" />
+                    Editor Features
+                </Flex>}
+                centered open={open} closable={false}
+                footer={[<Button key="ok" type="primary" onClick={() => {
+                    setOpen(false);
+                    navigate("/dashboard");
+                }}
+                >
+                    Done
+                </Button>,
+                ]}
+            >
+                <Tabs defaultActiveKey="1" centered >
+
+                    <TabPane tab="Pro Version" key="1">
+                        <Row gutter={[16, 16]}>
+                            {proFeatures?.map((text, index) => (
+                                <Col span={12} key={index}>
+                                    <Card size="small" style={{ textAlign: "center" }} hoverable>
+                                        <CiCircleCheck size={25} />
+                                        <div>{text}</div>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+                    </TabPane>
+
+                    <TabPane tab="Documentation" key="2">
+                        <Row gutter={[16, 16]}>
+                            {documentation?.map((item, index) => (
+                                <Col span={12} key={index}>
+                                    <Card size="small" style={{ textAlign: "center" }} hoverable>
+                                        {item?.icon}
+                                        <div>{item?.text}</div>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+                    </TabPane>
+                </Tabs>
+            </Modal>
 
             <Content>
                 <Row align="middle" justify="center" style={{ background: "#f5f3ff", padding: "50px" }}>
 
                     <Col xs={24} md={12}>
                         <Title level={5} className="font" style={{ fontSize: "60px" }}>
-                            Free Online Kanva
-                            <Title className="font" style={{ fontSize: "60px" }}>
-                                Builder
-                            </Title>
+                            Free Online Kanva<br />Builder
                         </Title>
-                        <Button type="primary" size="large" style={{ fontWeight: 100 }} onClick={() => navigate("/dashboard")}> Create Templates </Button>
+                        <Button type="primary" size="large" style={{ fontWeight: 100 }} onClick={() => setOpen(true)}>Open Features</Button>
                     </Col>
 
                     <Col xs={24} md={12}>
                         <Image width="100%" src={laptop} preview={false} style={{ maxWidth: "600px", borderRadius: "12px" }} />
                     </Col>
+                </Row>
+
+                <Row gutter={[10, 10]} style={{ padding: 50 }}>
+
+                    <Col span={6}>
+                        <Card hoverable style={{ height: "30vh", display: "grid", alignContent: " center", justifyContent: " center" }}>
+                            <CiCirclePlus color="gray" size={50} onClick={() => navigate("/dashboard")} />
+                        </Card>
+                    </Col>
+
+                    {savedTemplates?.map((tpl, index) => (
+                        <Col span={6} key={tpl?.id}>
+                            <Card style={{ padding: 0, height: "30vh", overflow: "hidden" }} hoverable extra={
+                                <>
+                                    <Tooltip title="Delete" color={colors[index] === undefined ? "pink" : colors[index]}>
+                                        <Button type="default" shape="circle" icon={<RiDeleteBin5Line color="red" size={22} onClick={() => dispatch(deleteTemplate(tpl?.id))} />} />
+                                    </Tooltip>
+                                </>
+                            }>
+                                <Image preview={false} loading="lazy" style={{ objectFit: "cover" }} alt="template preview" src={tpl?.preview} onClick={() => navigate(`/dashboard?id=${tpl?.id}`)} />
+                            </Card>
+                        </Col>
+                    ))}
                 </Row>
 
 
@@ -69,7 +170,7 @@ export default function HomePage() {
                                     <Card style={{ border: "none", margin: 10 }} >
                                         <Paragraph level={1} className="font"
                                             style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", fontSize: "17px" }}>
-                                            {item.svg} {item.text}
+                                            {item?.svg} {item?.text}
                                         </Paragraph>
                                     </Card>
                                 </Col>

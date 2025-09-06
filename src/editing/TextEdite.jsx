@@ -1,12 +1,14 @@
 import { Button, ColorPicker, Flex, InputNumber, Select, Typography, Slider } from 'antd';
-import { AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined, BoldOutlined, ItalicOutlined, UnderlineOutlined, StrikethroughOutlined, FontSizeOutlined } from "@ant-design/icons";
 
+import { CiTextAlignLeft, CiTextAlignCenter, CiTextAlignRight } from "react-icons/ci";
+import { FaBold, FaItalic, FaUnderline, FaStrikethrough } from "react-icons/fa6";
+import { ImTextHeight } from "react-icons/im";
 
 const TextEdite = ({ selectedEl, setElement, toggle }) => {
     return (
         <>
             <Typography style={{ padding: 5 }}>Font Size</Typography>
-            <InputNumber style={{ padding: 5 }} min={6} value={selectedEl?.fontSize || 16} addonBefore={<FontSizeOutlined />}
+            <InputNumber style={{ padding: 5 }} min={6} value={selectedEl?.fontSize || 16} addonBefore={<ImTextHeight size={16} />}
                 onChange={(value) =>
                     setElement(selectedEl?.id, (el) => ({
                         ...el,
@@ -17,10 +19,10 @@ const TextEdite = ({ selectedEl, setElement, toggle }) => {
 
             <Typography style={{ padding: 5 }}>Font Align</Typography>
             <Flex style={{ padding: 5 }} gap={10} wrap align='center' justify='start'>
-                <Button type={selectedEl?.align === "left" ? "primary" : "default"} icon={<AlignLeftOutlined />}
+                <Button type={selectedEl?.align === "left" ? "primary" : "default"} icon={<CiTextAlignLeft size={22} color='gray' />}
                     onClick={() => setElement(selectedEl?.id, (el) => ({ ...el, align: "left" }))}
                 />
-                <Button type={selectedEl?.align === "center" ? "primary" : "default"} icon={<AlignCenterOutlined />}
+                <Button type={selectedEl?.align === "center" ? "primary" : "default"} icon={<CiTextAlignCenter size={22} color='gray' />}
                     onClick={() =>
                         setElement(selectedEl?.id, (el) => ({
                             ...el,
@@ -28,7 +30,7 @@ const TextEdite = ({ selectedEl, setElement, toggle }) => {
                         }))
                     }
                 />
-                <Button type={selectedEl?.align === "right" ? "primary" : "default"} icon={<AlignRightOutlined />}
+                <Button type={selectedEl?.align === "right" ? "primary" : "default"} icon={<CiTextAlignRight size={22} color='gray' />}
                     onClick={() =>
                         setElement(selectedEl?.id, (el) => ({ ...el, align: "right" }))
                     }
@@ -37,10 +39,10 @@ const TextEdite = ({ selectedEl, setElement, toggle }) => {
 
             <Typography style={{ padding: 5 }}>Font Style</Typography>
             <Flex style={{ padding: 5 }} gap={10} wrap align='center' justify='start'>
-                <Button type={selectedEl?.bold ? "primary" : "default"} icon={<BoldOutlined />} onClick={() => toggle("bold")} />
-                <Button type={selectedEl?.italic ? "primary" : "default"} icon={<ItalicOutlined />} onClick={() => toggle("italic")} />
-                <Button type={selectedEl?.underline ? "primary" : "default"} icon={<UnderlineOutlined />} onClick={() => toggle("underline")} />
-                <Button type={selectedEl?.lineThrough ? "primary" : "default"} icon={<StrikethroughOutlined />} onClick={() => toggle("lineThrough")} />
+                <Button type={selectedEl?.bold ? "primary" : "default"} icon={<FaBold size={20} color='gray' />} onClick={() => toggle("bold")} />
+                <Button type={selectedEl?.italic ? "primary" : "default"} icon={<FaItalic size={20} color='gray' />} onClick={() => toggle("italic")} />
+                <Button type={selectedEl?.underline ? "primary" : "default"} icon={<FaUnderline size={20} color='gray' />} onClick={() => toggle("underline")} />
+                <Button type={selectedEl?.lineThrough ? "primary" : "default"} icon={<FaStrikethrough size={20} color='gray' />} onClick={() => toggle("lineThrough")} />
             </Flex>
 
             <Typography style={{ padding: 5 }}>Font Case</Typography>
@@ -48,7 +50,7 @@ const TextEdite = ({ selectedEl, setElement, toggle }) => {
                 ...el,
                 textTransform: value,
             }))}>
-                {["lowercase", "uppercase","none"].map((t) => (
+                {["lowercase", "uppercase", "none"].map((t) => (
                     <Select.Option key={t} value={t}>
                         {t}
                     </Select.Option>
@@ -137,4 +139,4 @@ const TextEdite = ({ selectedEl, setElement, toggle }) => {
         </>
     )
 }
-export default TextEdite
+export default TextEdite;

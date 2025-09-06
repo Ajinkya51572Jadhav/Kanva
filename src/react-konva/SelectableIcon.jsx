@@ -1,11 +1,10 @@
-// src/react-konva/SelectableIcon.jsx
 import React, { useRef, useEffect } from "react";
 import { Group, Path, Transformer } from "react-konva";
 import { useKonvaSnapping } from "use-konva-snapping";
 
-const BASE = 96; // react-icons viewBox size
+const BASE = 96;
 
-export const SelectableIcon = ({ shape, selected, onSelect, onChange }) => {
+export default function SelectableIcon({ shape, selected, onSelect, onChange }) {
   const groupRef = useRef();
   const trRef = useRef();
 
@@ -20,31 +19,31 @@ export const SelectableIcon = ({ shape, selected, onSelect, onChange }) => {
   });
 
   useEffect(() => {
-    if (selected && trRef.current && groupRef.current) {
-      trRef.current.nodes([groupRef.current]);
-      trRef.current.getLayer().batchDraw();
+    if (selected && trRef?.current && groupRef?.current) {
+      trRef?.current?.nodes([groupRef?.current]);
+      trRef?.current?.getLayer()?.batchDraw();
     }
   }, [selected]);
 
   function isLocked() {
-    if (shape.locked) return;
+    if (shape?.locked) return;
   }
 
   return (
     <>
       <Group
         ref={groupRef}
-        x={shape.x}
-        y={shape.y}
-        rotation={shape.rotation || 0}
-        draggable={!shape.locked}
-        visible={shape.visible}
+        x={shape?.x}
+        y={shape?.y}
+        rotation={shape?.rotation || 0}
+        draggable={!shape?.locked}
+        visible={shape?.visible}
         onMouseDown={onSelect}
         onTap={onSelect}
         onDragMove={(e) => {
           isLocked();
           handleDragging(e);
-          e.target.position({ x: e.target.x(), y: e.target.y() });
+          e?.target?.position({ x: e?.target?.x(), y: e?.target?.y() });
         }}
         onDragEnd={(e) => {
           isLocked();
@@ -62,8 +61,8 @@ export const SelectableIcon = ({ shape, selected, onSelect, onChange }) => {
           node.scaleX(1);
           node.scaleY(1);
 
-          const newW = Math.max(5, shape.width * scaleX);  // ✅ can shrink to 5px
-          const newH = Math.max(5, shape.height * scaleY);
+          const newW = Math.max(5, shape?.width * scaleX);  
+          const newH = Math?.max(5, shape?.height * scaleY);
 
           onChange({
             ...shape,
@@ -71,18 +70,18 @@ export const SelectableIcon = ({ shape, selected, onSelect, onChange }) => {
             y: node.y(),
             width: newW,
             height: newH,
-            rotation: Math.round(node.rotation()),
+            rotation: Math.round(node?.rotation()),
           });
         }}
-        opacity={shape.opacity ?? 1}
+        opacity={shape?.opacity ?? 1}
       >
         <Path
-          data={shape.path}
-          fill={shape.fill || "black"}
-          width={shape.width}
-          height={shape.height}
-          scaleX={shape.width / BASE}
-          scaleY={shape.height / BASE}
+          data={shape?.path}
+          fill={shape?.fill || "black"}
+          width={shape?.width}
+          height={shape?.height}
+          scaleX={shape?.width / BASE}
+          scaleY={shape?.height / BASE}
         />
       </Group>
 
@@ -99,7 +98,7 @@ export const SelectableIcon = ({ shape, selected, onSelect, onChange }) => {
             "bottom-right",
           ]}
           boundBoxFunc={(oldBox, newBox) => {
-            if (newBox.width < 1 || newBox.height < 1) {
+            if (newBox?.width < 1 || newBox?.height < 1) {
               return oldBox;
             }
             return newBox;

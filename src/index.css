@@ -8,8 +8,8 @@
 
 html,
 body {
-    height: 100%;
     width: 100%;
+    height: 100%;
     color: #111827;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -28,8 +28,9 @@ body {
 
 
 /* Scrollbar style */
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 0px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -43,4 +44,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #999;
-} */
+}

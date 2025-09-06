@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setPopUp, setSelectedUniqueId } from "../redux/editorReducer";
 import { message } from "antd";
+import { setPopUp, setSelectedUniqueId } from "../redux/editorReducer";
 
 import photo1 from "../assets/photo1.avif";
 import photo2 from "../assets/photo2.avif";
@@ -16,14 +16,13 @@ import photo10 from "../assets/photo10.avif";
 
 
 
-export const Photo = ({ setPagesWithHistory }) => {
+export default function Photo({ setPagesWithHistory }) {
     const dispatch = useDispatch();
-    const { activeIndex, canvasSize } = useSelector((state) => state.editor);
+    const { activeIndex, canvasSize } = useSelector((state) => state?.editor ?? {});
 
     const [galleryPhotos, setGalleryPhotos] = useState([photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10]);
     const [galleryPage, setGalleryPage] = useState(1);
 
-    // ✅ Fetch images from Picsum
     useEffect(() => {
         const abort = new AbortController();
         const fetchPics = async () => {
@@ -39,7 +38,6 @@ export const Photo = ({ setPagesWithHistory }) => {
                 );
             } catch (err) {
                 if (err.name !== "AbortError") {
-                    console.warn("Picsum fetch error:", err);
                 }
             }
         };
@@ -47,11 +45,10 @@ export const Photo = ({ setPagesWithHistory }) => {
         return () => abort.abort();
     }, [galleryPage]);
 
-    // ✅ Add image to canvas with preview → then HD
     const addImageToCanvas = ({ previewSrc, hdSrc, w, h }) => {
         const id = `i${Date.now()}`;
-        const x = (canvasSize.w - w) / 2;
-        const y = (canvasSize.h - h) / 2;
+        const x = (canvasSize?.w - w) / 2;
+        const y = (canvasSize?.h - h) / 2;
 
         setPagesWithHistory((prev) => {
             const cp = JSON.parse(JSON.stringify(prev));
@@ -61,11 +58,11 @@ export const Photo = ({ setPagesWithHistory }) => {
                     children: [],
                     background: "#ffffff",
                 };
-            page.children.push({
+            page?.children?.push({
                 id,
                 type: "image",
-                src: previewSrc, // 👈 show immediately
-                fullSrc: hdSrc,  // 👈 upgrade later
+                src: previewSrc, 
+                fullSrc: hdSrc, 
                 x,
                 y,
                 width: w,
@@ -86,16 +83,16 @@ export const Photo = ({ setPagesWithHistory }) => {
         if (!photo) return;
         if (photo?.id) {
             const aspect =
-                Number(photo.width) && Number(photo.height)
-                    ? Number(photo.width) / Number(photo.height)
+                Number(photo?.width) && Number(photo?.height)
+                    ? Number(photo?.width) / Number(photo?.height)
                     : 1.5;
             const w = Math.min(1000, sizeW);
             const h = Math.round(w / aspect);
 
             // preview (tiny, shows instantly)
-            const previewSrc = `https://picsum.photos/id/${photo.id}/200/140`;
+            const previewSrc = `https://picsum.photos/id/${photo?.id}/200/140`;
             // HD (loads later)
-            const hdSrc = `https://picsum.photos/id/${photo.id}/${w}/${h}`;
+            const hdSrc = `https://picsum.photos/id/${photo?.id}/${w}/${h}`;
 
             addImageToCanvas({ previewSrc, hdSrc, w, h });
         } else {
@@ -115,8 +112,8 @@ export const Photo = ({ setPagesWithHistory }) => {
                         gap: 8,
                     }}
                 >
-                    {galleryPhotos.map((p) => {
-                        const thumb = p.id ? `https://picsum.photos/id/${p.id}/200/140` : p;
+                    {galleryPhotos && galleryPhotos?.map((p) => {
+                        const thumb = p?.id ? `https://picsum.photos/id/${p?.id}/200/140` : p;
                         return (
                             <img
                                 key={p?.id || thumb}

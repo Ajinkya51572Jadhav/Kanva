@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ProLayout } from '@ant-design/pro-components';
-import { Image, message, Typography } from 'antd';
+import { Image, message } from 'antd';
 
 import { setCollapsed, setPath } from '../redux/editorReducer';
-import NetworkStatus from '../components/NetworkStatus';
-import { Editor } from './Editor';
-
-import { UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 import { RxText } from "react-icons/rx";
 import { BsWindowSidebar } from "react-icons/bs";
 import { HiOutlinePhoto } from "react-icons/hi2";
 import { PiShapesThin } from "react-icons/pi";
-import { IoCloudUploadOutline } from "react-icons/io5";
-import { SlSizeFullscreen } from "react-icons/sl";
-import { SlLayers } from "react-icons/sl";
+import { IoCloudUploadOutline, IoShapesOutline } from "react-icons/io5";
+import { SlSizeFullscreen, SlLayers } from "react-icons/sl";
+import { FaRegUser } from "react-icons/fa";
+import { RiMenu2Line, RiMenu3Fill } from "react-icons/ri";
 
-import k from "../assets/k.png";
-import canva from "../assets/canva.png";
+import canva from "../assets/logo.png";
+
+import NetworkStatus from '../components/NetworkStatus';
+import Editor from './Editor';
 
 
 const routes = [
@@ -36,6 +36,11 @@ const routes = [
     path: 'photo',
     name: 'Photo',
     icon: <HiOutlinePhoto size={22} />,
+  },
+  {
+    path: 'shape',
+    name: 'Shape',
+    icon: <IoShapesOutline size={20} />,
   },
   {
     path: 'element',
@@ -61,8 +66,9 @@ const routes = [
 
 
 export default () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { path, collapsed } = useSelector((state) => state.editor);
+  const { path, collapsed } = useSelector((state) => state?.editor ?? {});
   const [messageApi, contextHolder] = message.useMessage();
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1000);
@@ -95,18 +101,18 @@ export default () => {
     location: {
       pathname: `/${path}`,
     },
-    collapsed: collapsed.parent,
+    collapsed: collapsed?.parent,
     fixSiderbar: true,
     collapsedButtonRender: false,
     menuItemRender: (item, dom) => (
-      <div onClick={() => handleMenuClick(item.name.toLowerCase())}>
+      <div onClick={() => handleMenuClick(item?.name?.toLowerCase())}>
         {dom}
       </div>
     ),
-    logo: <Image src={canva || k} preview={false} width={120} style={{ marginLeft: "-20px" }} />,
+    logo: <Image src={canva || k} preview={false} width={120} style={{ marginLeft: "-20px" }} onClick={() => navigate("/")} />,
     title: '',
     avatarProps: {
-      icon: <UserOutlined />,
+      icon: <FaRegUser />,
       title: '',
     }
   };
@@ -122,7 +128,7 @@ export default () => {
         postMenuData={(menuData) => {
           return [
             {
-              icon: collapsed.parent ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />,
+              icon: collapsed?.parent ? <RiMenu3Fill /> : <RiMenu2Line />,
               name: '',
               onTitleClick: handleMenuBar,
             },

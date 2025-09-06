@@ -1,13 +1,16 @@
 import { useSelector } from "react-redux";
 import { Button, Space, Popover, Tooltip } from "antd";
-import { DownloadOutlined, FilePdfOutlined, PictureOutlined } from "@ant-design/icons";
 import jsPDF from "jspdf";
 
-export const Share = ({ stageRef }) => {
-  const { editorPages, activeIndex } = useSelector((state) => state.editor);
+import { BsDownload } from "react-icons/bs";
+import { FaRegFilePdf } from "react-icons/fa6";
+import { TbPhotoDown } from "react-icons/tb";
+
+export default function Share({ stageRef }) {
+  const { editorPages, activeIndex } = useSelector((state) => state?.editor ?? {});
 
   const getFileName = (ext) =>
-    `page-${(editorPages[activeIndex] || {}).id || activeIndex}.${ext}`;
+    `page-${(editorPages[activeIndex] || {})?.id || activeIndex}.${ext}`;
 
   const downloadURI = (uri, name) => {
     const link = document.createElement("a");
@@ -19,7 +22,7 @@ export const Share = ({ stageRef }) => {
   };
 
   const exportPNG = () => {
-    const uri = stageRef.current.toDataURL({
+    const uri = stageRef?.current?.toDataURL({
       pixelRatio: 2,
       mimeType: "image/png",
     });
@@ -27,7 +30,7 @@ export const Share = ({ stageRef }) => {
   };
 
   const exportJPG = () => {
-    const uri = stageRef.current.toDataURL({
+    const uri = stageRef?.current?.toDataURL({
       pixelRatio: 2,
       mimeType: "image/jpeg",
     });
@@ -35,24 +38,10 @@ export const Share = ({ stageRef }) => {
   };
 
   const exportPDF = () => {
-    const uri = stageRef.current.toDataURL({
-      pixelRatio: 2,
-      mimeType: "image/png",
-    });
-    const pdf = new jsPDF(
-      "l",
-      "pt",
-      [stageRef.current.width(), stageRef.current.height()]
-    );
-    pdf.addImage(
-      uri,
-      "PNG",
-      0,
-      0,
-      stageRef.current.width(),
-      stageRef.current.height()
-    );
-    pdf.save(getFileName("pdf"));
+    const uri = stageRef?.current?.toDataURL({ pixelRatio: 2, mimeType: "image/png" });
+    const pdf = new jsPDF("l", "pt", [stageRef?.current?.width(), stageRef?.current?.height()]);
+    pdf?.addImage(uri, "PNG", 0, 0, stageRef?.current?.width(), stageRef?.current?.height());
+    pdf?.save(getFileName("pdf"));
   };
 
 
@@ -61,13 +50,13 @@ export const Share = ({ stageRef }) => {
       <Popover
         content={
           <Space direction="vertical">
-            <Button icon={<PictureOutlined />} onClick={exportPNG} block>
+            <Button icon={<TbPhotoDown size={20} />} onClick={exportPNG} >
               Download PNG
             </Button>
-            <Button icon={<PictureOutlined />} onClick={exportJPG} block>
+            <Button icon={<TbPhotoDown size={20} />} onClick={exportJPG} >
               Download JPG
             </Button>
-            <Button icon={<FilePdfOutlined />} onClick={exportPDF} block>
+            <Button icon={<FaRegFilePdf size={20} />} onClick={exportPDF} >
               Download PDF
             </Button>
           </Space>
@@ -75,34 +64,8 @@ export const Share = ({ stageRef }) => {
         title="Export Options"
         trigger="click"
       >
-        <Button icon={<DownloadOutlined />} type="link" />
+        <Button icon={<BsDownload size={18} />} type="link" />
       </Popover>
     </Tooltip>
   );
 };
-
-
-
-
-
-// import { DownloadOutlined } from "@ant-design/icons";
-// import { Button } from "antd";
-// import { useSelector } from "react-redux";
-
-// export const Share = ({ stageRef }) => {
-//     const { editorPages, activeIndex } = useSelector((state) => state.editor);
-
-//     const exportPNG = () => {
-//         const uri = stageRef.current.toDataURL({ pixelRatio: 2, mimeType: "image/png" });
-//         const a = document.createElement("a");
-//         a.href = uri;
-//         a.download = `page-${(editorPages[activeIndex] || {}).id || activeIndex}.png`;
-//         a.click();
-//     };
-
-//     return (
-//         <>
-//             <Button type="link" onClick={exportPNG}><DownloadOutlined style={{ fontSize: 19 }} /></Button>
-//         </>
-//     )
-// }

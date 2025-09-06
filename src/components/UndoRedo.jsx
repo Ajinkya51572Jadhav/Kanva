@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Button, Tooltip } from 'antd';
-import { setEditorPages } from '../redux/editorReducer';
 import { LuUndo } from "react-icons/lu";
 import { LuRedo } from "react-icons/lu";
+import { setEditorPages } from '../redux/editorReducer';
 
 
-export const UndoRedo = ({ pushHistory }) => {
+export default function UndoRedo({ pushHistory }) {
     const dispatch = useDispatch();
 
     const [canUndo, setCanUndo] = useState(false);
@@ -18,26 +18,25 @@ export const UndoRedo = ({ pushHistory }) => {
 
 
     useEffect(() => {
-        if (suppressPushRef.current) return;
+        if (suppressPushRef?.current) return;
         try {
             const snap = JSON.parse(JSON.stringify(pushHistory));
-            const h = historyRef.current.slice(0, historyIndexRef.current + 1);
-            h.push(snap);
+            const h = historyRef?.current?.slice(0, historyIndexRef?.current + 1);
+            h?.push(snap);
             historyRef.current = h;
-            historyIndexRef.current = h.length - 1;
-            setCanUndo(historyIndexRef.current > 0);
+            historyIndexRef.current = h?.length - 1;
+            setCanUndo(historyIndexRef?.current > 0);
             setCanRedo(false);
         } catch (err) {
-            console.error("error:", err);
         }
     }, [pushHistory]);
 
 
 
     const undo = () => {
-        if (historyIndexRef.current <= 0) return;
-        const newIndex = historyIndexRef.current - 1;
-        const snap = historyRef.current[newIndex];
+        if (historyIndexRef?.current <= 0) return;
+        const newIndex = historyIndexRef?.current - 1;
+        const snap = historyRef?.current[newIndex];
         historyIndexRef.current = newIndex;
         suppressPushRef.current = true;
         dispatch(setEditorPages(snap));
@@ -47,14 +46,14 @@ export const UndoRedo = ({ pushHistory }) => {
     };
 
     const redo = () => {
-        if (historyIndexRef.current >= historyRef.current.length - 1) return;
-        const newIndex = historyIndexRef.current + 1;
-        const snap = historyRef.current[newIndex];
+        if (historyIndexRef?.current >= historyRef?.current?.length - 1) return;
+        const newIndex = historyIndexRef?.current + 1;
+        const snap = historyRef?.current[newIndex];
         historyIndexRef.current = newIndex;
         suppressPushRef.current = true;
         dispatch(setEditorPages(snap));
         setCanUndo(true);
-        setCanRedo(newIndex < historyRef.current.length - 1);
+        setCanRedo(newIndex < historyRef?.current?.length - 1);
         setTimeout(() => (suppressPushRef.current = false), 0);
     };
 

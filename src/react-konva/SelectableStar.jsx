@@ -1,11 +1,9 @@
 import { useRef, useEffect } from "react";
-import { Rect, Transformer, } from "react-konva";
+import { Star, Transformer } from "react-konva";
 import { useKonvaSnapping } from "use-konva-snapping";
 import Konva from "konva";
 
-
-
-export default function SelectableRect({ shape, selected, onSelect, onChange }) {
+export default function SelectableStar({ shape, selected, onSelect, onChange }) {
     const ref = useRef();
     const trRef = useRef();
 
@@ -28,43 +26,53 @@ export default function SelectableRect({ shape, selected, onSelect, onChange }) 
 
     if (!shape) return null;
 
-
-
     return (
         <>
-            <Rect
+            <Star
                 ref={ref}
-                {...shape}
+                x={shape?.x || 150}
+                y={shape?.y || 150}
+                numPoints={shape?.numPoints || 5}         
+                innerRadius={shape?.innerRadius || 30}   
+                outerRadius={shape?.outerRadius || 60}   
+                rotation={shape?.rotation || 0}
+                stroke={shape?.stroke || "#000"}
+                fill={shape?.fill || "transparent"}
+                strokeWidth={shape?.strokeWidth || 2}
+                dash={shape?.dash || []}
+                opacity={shape?.opacity ?? 1}
                 draggable={!shape?.locked}
-                visible={shape?.visible}
+                visible={shape?.visible !== false}
                 filters={shape?.blurRadius ? [Konva?.Filters?.Blur] : []}
                 blurRadius={shape?.blurRadius || 0}
-                cornerRadius={shape?.cornerRadius || 0}
+                shadowColor={shape?.shadowColor || "black"}
+                shadowBlur={shape?.shadowBlur || 0}
+                shadowOffsetX={shape?.shadowOffsetX || 0}
+                shadowOffsetY={shape?.shadowOffsetY || 0}
+                shadowOpacity={shape?.shadowOpacity ?? 1}
                 onMouseDown={onSelect}
                 onTap={onSelect}
                 onDragMove={(e) => {
                     if (shape?.locked) return;
                     handleDragging(e);
-                    e.target.position({ x: e.target.x(), y: e.target.y() });
                 }}
                 onDragEnd={(e) => {
-                    if (shape.locked) return;
-                    handleDragEnd(e)
-                    onChange({ ...shape, x: e.target.x(), y: e.target.y() })
+                    if (shape?.locked) return;
+                    handleDragEnd(e);
+                    onChange({ ...shape, x: e.target.x(), y: e.target.y() });
                 }}
                 onTransformEnd={() => {
-                    if (shape.locked) return; 
-                    const node = ref.current;
+                    if (shape?.locked) return;
+                    const node = ref?.current;
                     const scaleX = node.scaleX();
-                    const scaleY = node.scaleY();
                     node.scaleX(1);
                     node.scaleY(1);
                     onChange({
                         ...shape,
                         x: node.x(),
                         y: node.y(),
-                        width: node.width() * scaleX,
-                        height: node.height() * scaleY,
+                        innerRadius: node.innerRadius() * scaleX,
+                        outerRadius: node.outerRadius() * scaleX,
                         rotation: Math.round(node.rotation()),
                     });
                 }}

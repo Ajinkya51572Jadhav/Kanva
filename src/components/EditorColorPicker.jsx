@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ColorPicker, Tooltip } from "antd";
 
-export const EditorColorPicker = ({ setPagesWithHistory }) => {
-    const { activeIndex, selectedUniqueId } = useSelector((state) => state.editor);
+export default function EditorColorPicker({ setPagesWithHistory }) {
+    const { activeIndex, selectedUniqueId } = useSelector((state) => state?.editor ?? {});
     const [color, setColor] = useState("#000000");
 
     // get active object if one is selected
@@ -11,21 +11,21 @@ export const EditorColorPicker = ({ setPagesWithHistory }) => {
         if (!pages[activeIndex]) return null;
         if (!selectedUniqueId) return null;
         return pages[activeIndex]?.children?.find(
-            (c) => c.id === selectedUniqueId
+            (c) => c?.id === selectedUniqueId
         );
     };
 
     const handleColorChange = (bg) => {
-        let newColor = bg.toHexString();
+        let newColor = bg?.toHexString();
         setColor(newColor);
 
         setPagesWithHistory((prev) => {
             const cp = JSON.parse(JSON.stringify(prev));
 
             if (selectedUniqueId) {
-                cp[activeIndex].children = cp[activeIndex].children.map((c) => {
-                    if (c.id === selectedUniqueId) {
-                        if (c.type === "text") {
+                cp[activeIndex].children = cp[activeIndex]?.children?.map((c) => {
+                    if (c?.id === selectedUniqueId) {
+                        if (c?.type === "text") {
                             return { ...c, fill: newColor };
                         }
                         if (c.type === "icon") {
@@ -55,12 +55,12 @@ export const EditorColorPicker = ({ setPagesWithHistory }) => {
         setPagesWithHistory((prev) => {
             const obj = getActiveObject(prev);
             if (obj) {
-                if (obj.type === "text") {
-                    setColor(obj.fill || "#000000");
-                } else if (obj.type === "line") {
-                    setColor(obj.stroke || "#000000");
+                if (obj?.type === "text") {
+                    setColor(obj?.fill || "#000000");
+                } else if (obj?.type === "line") {
+                    setColor(obj?.stroke || "#000000");
                 } else {
-                    setColor(obj.fill || "#000000");
+                    setColor(obj?.fill || "#000000");
                 }
             } else {
                 setColor(prev[activeIndex]?.background || "#ffffff");
@@ -75,31 +75,3 @@ export const EditorColorPicker = ({ setPagesWithHistory }) => {
         </Tooltip>
     );
 };
-
-
-
-// import { ColorPicker } from 'antd';
-// import React, { useState } from 'react'
-// import { useSelector } from 'react-redux';
-
-// export const Editorbg = ({ setPagesWithHistory }) => {
-//     const { activeIndex } = useSelector((state) => state.editor);
-//     const [color, setColor] = useState("#ffffff");
-
-//     const setBackgroundForActive = (bg) => {
-//         let { r, g, b, a } = bg.metaColor;
-//         let color = `rgba(${r}, ${g}, ${b}, ${a})`;
-//         setColor(color);
-//         setPagesWithHistory((prev) => {
-//             const cp = JSON.parse(JSON.stringify(prev));
-//             cp[activeIndex] = { ...(cp[activeIndex] || {}), background: color, children: cp[activeIndex]?.children || [] };
-//             return cp;
-//         });
-//     };
-
-//     return (
-//         <>
-//             <ColorPicker onChange={(value) => setBackgroundForActive(value)} value={color} />
-//         </>
-//     )
-// }

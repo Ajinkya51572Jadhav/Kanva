@@ -1,34 +1,34 @@
-import {
-    AppstoreOutlined,
-    EyeInvisibleOutlined,
-    EyeOutlined,
-    FontSizeOutlined,
-    PictureOutlined,
-    LockOutlined,
-    UnlockOutlined,
-} from "@ant-design/icons";
-import { DragSortTable } from "@ant-design/pro-components";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedUniqueId } from "../redux/editorReducer";
 import { Button, Empty, message, Tooltip, Typography } from "antd";
+import { DragSortTable } from "@ant-design/pro-components";
 
-export const Layer = ({ elements = [], onToggleLock, onToggleVisibility, onReorder }) => {
+import { TbTextSize } from "react-icons/tb";
+import { HiOutlinePhoto } from "react-icons/hi2";
+import { LiaShapesSolid } from "react-icons/lia";
+import { IoEyeOffOutline ,IoEyeOutline} from "react-icons/io5";
+import { CiLock ,CiUnlock} from "react-icons/ci";
+
+import { setSelectedUniqueId } from "../redux/editorReducer";
+
+const getIcon = (type) => {
+    switch (type) {
+        case "text":
+            return <TbTextSize size={20}/>;
+        case "image":
+            return <HiOutlinePhoto size={20}/>;
+        case "svg":
+            return <LiaShapesSolid size={24}/>;
+        default:
+            return <LiaShapesSolid size={24}/>;
+    }
+};
+
+export default function Layer({ elements = [], onToggleLock, onToggleVisibility, onReorder }) {
     const dispatch = useDispatch();
-    const { selectedUniqueId } = useSelector((state) => state.editor);
+    const { selectedUniqueId } = useSelector((state) => state?.editor ?? {});
     const [messageApi, contextHolder] = message.useMessage();
 
-    const getIcon = (type) => {
-        switch (type) {
-            case "text":
-                return <FontSizeOutlined />;
-            case "image":
-                return <PictureOutlined />;
-            case "svg":
-                return <AppstoreOutlined />;
-            default:
-                return <AppstoreOutlined />;
-        }
-    };
+
 
     const columns = [
         {
@@ -45,12 +45,12 @@ export const Layer = ({ elements = [], onToggleLock, onToggleVisibility, onReord
                             alignItems: "center",
                             gap: 8,
                             cursor: "pointer",
-                            fontWeight: selectedUniqueId === record.id ? 600 : 400,
-                            color: selectedUniqueId === record.id ? "#1890ff" : "inherit",
+                            fontWeight: selectedUniqueId === record?.id ? 600 : 400,
+                            color: selectedUniqueId === record?.id ? "#1890ff" : "inherit",
                         }}
-                        onClick={() => dispatch(setSelectedUniqueId(record.id))}
+                        onClick={() => dispatch(setSelectedUniqueId(record?.id))}
                     >
-                        {getIcon(record.type)}
+                        {getIcon(record?.type)}
                         <Typography.Text ellipsis={{ tooltip: record?.text || record?.type || record?.id }}>
                             {record?.text?.slice(0, 12) ||
                                 record?.type?.slice(0, 12) ||
@@ -65,27 +65,27 @@ export const Layer = ({ elements = [], onToggleLock, onToggleVisibility, onReord
             dataIndex: "actions",
             align: "right",
             render: (_, record) => (
-                <div style={{ display: "flex", gap: 4 }}>
-                    <Tooltip title={record.visible ? "Hide" : "Show"}>
+                <div style={{ display: "flex", gap: 2 }}>
+                    <Tooltip title={record?.visible ? "Hide" : "Show"}>
                         <Button
                             size="small"
                             type="text"
-                            icon={record.visible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                            icon={record?.visible ? <IoEyeOutline size={18} /> : <IoEyeOffOutline size={18}/>}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onToggleVisibility?.(record.id);
+                                onToggleVisibility?.(record?.id);
                             }}
                         />
                     </Tooltip>
 
-                    <Tooltip title={record.locked ? "Unlock" : "Lock"}>
+                    <Tooltip title={record?.locked ? "Unlock" : "Lock"}>
                         <Button
                             size="small"
                             type="text"
-                            icon={record.locked ? <LockOutlined /> : <UnlockOutlined />}
+                            icon={record?.locked ? <CiLock size={21} /> : <CiUnlock size={21} />}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onToggleLock?.(record.id);
+                                onToggleLock?.(record?.id);
                             }}
                         />
                     </Tooltip>
@@ -120,109 +120,3 @@ export const Layer = ({ elements = [], onToggleLock, onToggleVisibility, onReord
         </>
     );
 };
-
-
-
-
-
-// import { AppstoreOutlined, EyeInvisibleOutlined, EyeOutlined, FontSizeOutlined, InboxOutlined, LockOutlined, MenuOutlined, PictureOutlined, UnlockOutlined } from "@ant-design/icons";
-// import { DragSortTable } from "@ant-design/pro-components";
-// import { useRef } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { setSelectedUniqueId } from "../redux/editorReducer";
-// import { Button, Empty, message, Tooltip, Typography } from "antd";
-
-// export const Layer = ({ elements = [], onToggleLock, onToggleVisibility, onReorder }) => {
-//     const dispatch = useDispatch();
-//     const actionRef = useRef();
-//     const { selectedUniqueId } = useSelector((state) => state.editor);
-
-//     const getIcon = (type) => {
-//         switch (type) {
-//             case "text": return <FontSizeOutlined />;
-//             case "image": return <PictureOutlined />;
-//             case "svg": return <AppstoreOutlined />;
-//             default: return <AppstoreOutlined />;
-//         }
-//     };
-
-//     const columns = [
-//         {
-//             dataIndex: "sort",
-//         },
-//         {
-//             dataIndex: "name",
-//             className: "drag-visible",
-//             render: (_, record) => {
-//                 return (
-//                     <div
-//                         style={{
-//                             display: "flex",
-//                             alignItems: "center",
-//                             gap: 8,
-//                             cursor: "pointer",
-//                             fontWeight: selectedUniqueId === record.id ? 600 : 400,
-//                             color: selectedUniqueId === record.id ? "#1890ff" : "inherit",
-//                         }}
-//                         onClick={() => dispatch(setSelectedUniqueId(record.id))}
-//                     >
-//                         {getIcon(record.type)}
-//                         <Typography style={{ maxWidth: 140 }}>
-//                             {record?.text?.slice(0, 12) || record?.type?.slice(0, 12) || record?.id?.slice(0, 12) || "N/A"}
-//                         </Typography>
-//                     </div>
-//                 )
-//             },
-//         },
-//         {
-//             dataIndex: "actions",
-//             align: "right",
-//             render: (_, record) => (
-//                 <div style={{ display: "flex", gap: 4 }}>
-//                     <Tooltip title={record.visible ? "Hide" : "Show"}>
-//                         <Button size="small"
-//                             type="text"
-//                             icon={record.visible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-//                             onClick={(e) => {
-//                                 e.stopPropagation();
-//                                 onToggleVisibility(record.id);
-//                             }}
-//                         />
-//                     </Tooltip>
-
-//                     <Tooltip title={record.locked ? "Unlock" : "Lock"}>
-//                         <Button
-//                             size="small"
-//                             type="text"
-//                             icon={record.locked ? <LockOutlined /> : <UnlockOutlined />}
-//                             onClick={(e) => {
-//                                 e.stopPropagation();
-//                                 onToggleLock(record.id);
-//                             }}
-//                         />
-//                     </Tooltip>
-//                 </div>
-//             ),
-//         },
-//     ];
-
-//     return (
-//         <DragSortTable
-//             actionRef={actionRef}
-//             rowKey="id"
-//             pagination={false}
-//             dataSource={elements.length > 0 ? elements : []}
-//             columns={columns}
-//             dragSortKey="sort"
-//             search={false}
-//             toolBarRender={false}
-//             locale={{
-//                 emptyText: (<Empty description={'No Layer'} />),
-//             }}
-//             onDragSortEnd={(beforeIndex, afterIndex, newDataSource) => {
-//                 message.success({ content: "Sort Sucess", duration: 1000 })
-//                 onReorder?.(newDataSource);
-//             }}
-//         />
-//     );
-// };

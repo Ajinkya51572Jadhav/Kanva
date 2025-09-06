@@ -1,23 +1,19 @@
-import React from 'react';
-
-// import storage from 'redux-persist/lib/storage';
-// import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from 'redux-persist';
 
 import { configureStore } from '@reduxjs/toolkit';
 import editorReducer from "./editorReducer";
-import toolReducer from "./toolReducer";
-// const persistConfig = {
-//     key: "root",
-//     storage,
-// };
+
+const persistConfig = {
+    key: "root",
+    storage,
+};
 
 // const persistedReducer = persistReducer(persistConfig, editorReducer);
 
 export const store = configureStore({
     reducer: {
         "editor": editorReducer,
-        "tool": toolReducer,
-
     },
     // middleware: (getDefaultMiddleware) =>
     //     getDefaultMiddleware({

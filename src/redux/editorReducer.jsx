@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    path: "tool",
+    path: "banner",
     collapsed: {
-        parent: true,
+        parent: false,
         child: true,
     },
     canvasSize: { w: 1080, h: 1080 },
@@ -14,6 +14,7 @@ const initialState = {
     popup: false,
     fontList: [],
     uploadsPhotos: [],
+    savedTemplates: [],
 };
 
 const editorSlice = createSlice({
@@ -51,7 +52,14 @@ const editorSlice = createSlice({
         },
         setUploadsPhotos: (state, action) => {
             state.uploadsPhotos = action.payload;
-        }
+        },
+        setSaveTemplate: (state, action) => {
+            state.savedTemplates.push(action.payload);
+        },
+        deleteTemplate: (state, action) => {
+            state.savedTemplates = state.savedTemplates.filter((tpl) => String(tpl?.id) !== String(action.payload));
+        },
+
     }
 });
 
@@ -65,6 +73,8 @@ export const {
     setPopUp,
     setFontList,
     setCanvasSize,
-    setUploadsPhotos
+    setUploadsPhotos,
+    setSaveTemplate,
+    deleteTemplate
 } = editorSlice.actions;
 export default editorSlice.reducer;    
