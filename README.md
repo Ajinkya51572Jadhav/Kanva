@@ -1,12 +1,38 @@
-# React + Vite
+# 🎨 Kanva Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and user-friendly **Canva-like graphic design tool** built using web technologies. This project allows users to create, edit, and customize designs just like Canva with intuitive UI and creative tools.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Preview
 
-## Expanding the ESLint configuration
+Here’s a full preview of the application interface:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+![Kanva Preview](https://raw.githubusercontent.com/Ajinkya51572Jadhav/Kanva/refs/heads/main/src/assets/canva.png)
+
+---
+
+## 🚀 Features
+
+✅ Drag & Drop elements  
+✅ Add Text, Shapes, and Images  
+✅ Customize fonts, colors, and sizes  
+✅ Export your design as an image  
+✅ Responsive design for all screens  
+✅ Built with clean and modular code  
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| **React.js** | UI Development |
+| **Tailwind CSS** | Styling & Layout |
+| **Fabric.js / Konva.js** | Canvas Editing Tools |
+| **Vite / CRA** | Fast Development Build Tools |
+
+---
+
+## 📂 Project Structure
+
