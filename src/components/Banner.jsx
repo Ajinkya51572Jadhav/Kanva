@@ -758,7 +758,7 @@ export default function BannerList({ setPagesWithHistory }) {
             );
             setThumbs(previews.map((url, i) => ({ url, banner: banners[i] })));
             setLoading(true);
-        }, 80); // wait for images to load
+        }, 200); // wait for images to load
 
         return () => clearTimeout(timeout);
     }, [banners]);

@@ -9,16 +9,16 @@ const persistConfig = {
     storage,
 };
 
-// const persistedReducer = persistReducer(persistConfig, editorReducer);
+const persistedReducer = persistReducer(persistConfig, editorReducer);
 
 export const store = configureStore({
     reducer: {
-        "editor": editorReducer,
+        "editor": persistedReducer,
     },
-    // middleware: (getDefaultMiddleware) =>
-    //     getDefaultMiddleware({
-    //         serializableCheck: false, // not warning for persist 
-    //     }),
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false, // not warning for persist 
+        }),
 });
 
-// export const persistor = persistStore(store);
+export const persistor = persistStore(store);
