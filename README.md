@@ -28,11 +28,6 @@ Here’s a full preview of the application interface:
 | Technology | Purpose |
 |------------|---------|
 | **React.js** | UI Development |
-| **Tailwind CSS** | Styling & Layout |
+| **Antd / CSS** | Styling & Layout |
 | **Fabric.js / Konva.js** | Canvas Editing Tools |
 | **Vite / CRA** | Fast Development Build Tools |
-
----
-
-## 📂 Project Structure
-
